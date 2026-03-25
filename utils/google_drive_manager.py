@@ -81,14 +81,7 @@ class GoogleDriveManager:
     
     def _initialize(self):
         """Initialize dengan retry logic"""
-        service_account_file = 'service_account.json'
-        
-        if not os.path.exists(service_account_file):
-            st.error(f"âŒ File {service_account_file} tidak ditemukan!")
-            self.creds = None
-            self.gc = None
-            self.drive_service = None
-            return
+    
         
         for attempt in range(self.MAX_RETRIES):
             try:

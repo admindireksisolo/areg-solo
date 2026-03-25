@@ -92,11 +92,21 @@ class GoogleDriveManager:
         
         for attempt in range(self.MAX_RETRIES):
             try:
-                # Load credentials
-                self.creds = Credentials.from_service_account_file(
-                    service_account_file,
-                    scopes=self.SCOPES
-                )
+                # Load credentials: coba st.secrets (cloud) lalu file (lokal)
+                try:
+                    _sec = dict(st.secrets.get("gcp_service_account", {}))
+                    if _sec:
+                        if 'private_key' in _sec:
+                            _sec['private_key'] = _sec['private_key'].replace('\\n', '\n')
+                        from google.oauth2.service_account import Credentials as _C
+                        self.creds = _C.from_service_account_info(_sec, scopes=self.SCOPES)
+                    else:
+                        raise KeyError("kosong")
+                except Exception:
+                    self.creds = Credentials.from_service_account_file(
+                        service_account_file,
+                        scopes=self.SCOPES
+                    )
                 
                 # Initialize Google Sheets
                 self.gc = gspread.authorize(self.creds)

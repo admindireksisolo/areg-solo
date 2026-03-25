@@ -85,9 +85,20 @@ class GoogleDriveManager:
             try:
                 # Load credentials dari st.secrets (cloud) atau file (lokal)
                 if "gcp_service_account" in st.secrets:
-                    import json as _json
-                    _info = _json.loads(_json.dumps(dict(st.secrets["gcp_service_account"])))
-                    self.creds = Credentials.from_service_account_info(_info, scopes=self.SCOPES)
+    _sec = st.secrets["gcp_service_account"]
+    _info = {
+        "type": _sec["type"],
+        "project_id": _sec["project_id"],
+        "private_key_id": _sec["private_key_id"],
+        "private_key": _sec["private_key"],
+        "client_email": _sec["client_email"],
+        "client_id": _sec["client_id"],
+        "auth_uri": _sec["auth_uri"],
+        "token_uri": _sec["token_uri"],
+        "auth_provider_x509_cert_url": _sec["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": _sec["client_x509_cert_url"],
+    }
+    self.creds = Credentials.from_service_account_info(_info, scopes=self.SCOPES)
                 else:
                     service_account_file = 'service_account.json'
                     self.creds = Credentials.from_service_account_file(

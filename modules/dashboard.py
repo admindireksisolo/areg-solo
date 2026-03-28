@@ -238,7 +238,7 @@ def show():
     """, unsafe_allow_html=True)
 
     # ===== TWO PANELS =====
-    col_kanan, col_kiri = st.columns(2)
+    col_kiri, col_kanan = st.columns(2)
 
     # --- Panel kanan: Dokumen Terbaru ---
     with col_kanan:
